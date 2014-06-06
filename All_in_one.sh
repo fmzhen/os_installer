@@ -68,13 +68,14 @@ keystone endpoint-create \
   --publicurl=http://controller:5000/v2.0 \
   --internalurl=http://controller:5000/v2.0 \
   --adminurl=http://controller:35357/v2.0
-cat > ~/keystonerc << EOF
+cat > ~/adminrc << EOF
 export OS_USERNAME=admin
 export OS_PASSWORD=ADMIN_PASS
 export OS_TENANT_NAME=admin
 export OS_AUTH_URL=http://controller:35357/v2.0
 EOF
-source keystonerc
+source ~/adminrc
+unset OS_SERVICE_TOKEN OS_SERVICE_ENDPOINT
 
 
 #########################GLANCE###################################################
@@ -133,8 +134,8 @@ keystone endpoint-create \
   --adminurl=http://controller:9292
 service glance-registry restart
 service glance-api restart
-mkdir images
-#cd images/
+mkdir ~/images
+#cd ~/images/
 #wget http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img
 #glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
 #  --container-format bare --is-public True --progress < cirros-0.3.2-x86_64-disk.img
@@ -203,28 +204,30 @@ sed -i "1a novncproxy_base_url = http://${IP}:6080/vnc_auto.html" /etc/nova/nova
 service nova-compute restart
 
 #######################NOVA-NETWORK##########################
-ed -i '1a network_api_class = nova.network.api.API\
+sed -i '1a network_api_class = nova.network.api.API\
 security_group_api = nova' /etc/nova/nova.conf
 service nova-api restart
 service nova-scheduler restart
 service nova-conductor restart
 
 apt-get -y install nova-network
-sed -i '1a network_api_class = nova.network.api.API\
-security_group_api = nova\
-firewall_driver = nova.virt.libvirt.firewall.IptablesFirewallDriver\
-network_manager = nova.network.manager.FlatDHCPManager\
-network_size = 254\
-allow_same_net_traffic = False\
-multi_host = True\
-send_arp_for_ha = True\
-share_dhcp_address = True\
-force_dhcp_release = True\
-flat_network_bridge = br100\
-flat_interface = eth0\
-public_interface = eth0\' /etc/nova/nova.conf
+sed -i '1a network_api_class = nova.network.api.API \
+security_group_api = nova \
+firewall_driver = nova.virt.libvirt.firewall.IptablesFirewallDriver \
+network_manager = nova.network.manager.FlatDHCPManager \
+network_size = 254 \
+allow_same_net_traffic = False \
+multi_host = True \
+send_arp_for_ha = True \
+share_dhcp_address = True \
+force_dhcp_release = True \
+flat_network_bridge = br100 \
+flat_interface = eth0 \
+public_interface = eth0 ' /etc/nova/nova.conf
 service nova-network restart
-#nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 203.0.113.24/29
+#nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+#nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+#nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 172.16.0.0/24
 
 #############################DASHBOARD##########################
 apt-get -y install apache2 memcached libapache2-mod-wsgi openstack-dashboard
