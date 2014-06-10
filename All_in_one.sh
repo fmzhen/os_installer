@@ -134,11 +134,12 @@ keystone endpoint-create \
   --adminurl=http://controller:9292
 service glance-registry restart
 service glance-api restart
+sleep 1
 mkdir ~/images
-#cd ~/images/
-#wget http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img
-#glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
-#  --container-format bare --is-public True --progress < cirros-0.3.2-x86_64-disk.img
+cd ~/images/
+wget http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img
+glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
+  --container-format bare --is-public True --progress < cirros-0.3.2-x86_64-disk.img
 
 
 #########################COMPUTE-CONTROLLER###################################
@@ -225,9 +226,10 @@ flat_network_bridge = br100 \
 flat_interface = eth0 \
 public_interface = eth0 ' /etc/nova/nova.conf
 service nova-network restart
-#nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
-#nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
-#nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 172.16.0.0/24
+sleep 3
+nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 $1
 
 #############################DASHBOARD##########################
 apt-get -y install apache2 memcached libapache2-mod-wsgi openstack-dashboard
