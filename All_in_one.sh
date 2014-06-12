@@ -1,8 +1,8 @@
 #!/bin/bash
-
+#####
 #config the hostname 
 IP=$(/sbin/ifconfig eth0 | grep 'inet addr' | \
-    sed 's/^.*addr://g' | sed 's/Bcast.*$//g')
+    sed 's/^.*addr://g' | sed 's/  Bcast.*$//g')
 hostname controller
 echo "controller" > /etc/hostname
 sed -i "1a $IP controller" /etc/hosts
