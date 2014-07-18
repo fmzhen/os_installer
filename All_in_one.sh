@@ -1,5 +1,6 @@
 #!/bin/bash
 #####
+#set -e
 #config the hostname 
 IP=$(/sbin/ifconfig eth0 | grep 'inet addr' | \
     sed 's/^.*addr://g' | sed 's/  Bcast.*$//g')
@@ -137,9 +138,9 @@ service glance-api restart
 sleep 1
 mkdir ~/images
 cd ~/images/
-wget http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img
-glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
-  --container-format bare --is-public True --progress < cirros-0.3.2-x86_64-disk.img
+#wget http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img
+#glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
+#  --container-format bare --is-public True --progress < cirros-0.3.2-x86_64-disk.img
 
 
 #########################COMPUTE-CONTROLLER###################################
@@ -229,7 +230,11 @@ service nova-network restart
 sleep 3
 nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
 nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
-nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 $1
+if [ "$1" == "" ]; then
+    :
+else
+    nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 $1
+fi 
 
 #############################DASHBOARD##########################
 apt-get -y install apache2 memcached libapache2-mod-wsgi openstack-dashboard
