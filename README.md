@@ -6,10 +6,10 @@ os_installer
 - 环境要求： 纯净的ubuntu12.04或14.04系统，单机单网卡。
 - 安装的组件： 运行OpenStack所需要的最基本的组件：keystone/glance/nova/horizon。
 - 网络： 网络使用的较老的nova-network。网络模式使用flatdhcp,若想安装时创建网络，将网络作为参数传入即可,如 `source ./All_in_one.sh 192.168.0.1/24`。也可安装完成后，自己创建
-`nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 $1`
+`nova network-create demo-net --bridge br100 --multi-host T --fixed-range-v4 192.168.0.1/24`
 
-- 安装  直接用root执行All_in_one.sh。  如： `source ./All_in_one.sh 192.168.0.1/24` 或 `source  ./All_in_one.sh`
-
+- 安装：直接用root执行All_in_one.sh。  如： `source ./All_in_one.sh 192.168.0.1/24` 或 `source  ./All_in_one.sh`
+- 安装中的交互： 安装过程中会提示输入mysql密码，请输入“admin”，然后是mysql的安全信息设定，选yes/no（大都选yes）。
 
 ###配置主机信息
 配置主机名为controller,并在hosts中将controller和eth0的ip对应起来。
@@ -42,16 +42,12 @@ glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
 这里安装除nova-compute和nova-network之外的其他nova服务
 
 
-
-
 ###安装compute服务
 安装nova-compute服务，由于我们只有一台机器，所以即是控制节点，也是计算节点。虚拟化使用的是kvm。
 
 ###安装nova-network服务
 官网上这步安装的服务是nova-network 和nova-api-metadata(在nova-network的multi-host情况下有用)。由于nova-api和nova-api-metadata不兼容，所以没有安装nova-api-metadata。
 - 创建了default安全组，开放22（tcp）和-1(icmp)端口。
-
-
 
 ###安装dashboard
 安装完成后，在浏览器中输入 http://本机ip/horizon  即可看到horizon界面，输入admin / ADMIN_PASS即可登陆进去。
