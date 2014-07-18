@@ -1,5 +1,14 @@
 #!/bin/bash
 #add the compute nova
+#set -e
+
+if [ "$1" == "" ] || [ "$2" == "" ];then
+    echo "input  correct paragrams"
+fi
+
+apt-get -y install python-software-properties
+add-apt-repository -y cloud-archive:icehouse
+apt-get update
 
 ##########################config  compute  service#################
 IP=$(/sbin/ifconfig eth0 | grep 'inet addr' | \
