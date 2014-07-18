@@ -52,11 +52,11 @@ glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 \
 ###安装dashboard
 安装完成后，在浏览器中输入 http://本机ip/horizon  即可看到horizon界面，输入admin / ADMIN_PASS即可登陆进去。
 
-
-
-
-
-
+##增加计算节点
+当完成了All_in_one的安装后，那个节点就既是一个控制节点也是一个计算节点，可在其基础上增加结算节点。计算节点为ubuntu12.04或14.04。
+- `source compute_node_install $1  $2` 参数1是要为计算节点起的主机名，如compute1;参数2是控制节点的IP。
+- 计算节点就是安装了nova-compute-kvm（计算服务）以及nova-network/nova-api-metadata（网络服务）等服务，其中有一个交互界面，选择yes即可。
+- 使用kvm，机器要支持硬件虚拟化。另外网络是multi-host的nova-network，所以每个节点都安装了nova-network服务。网络模式FlatDHCP。
 
 
 
