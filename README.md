@@ -1,5 +1,6 @@
 os_installer
 ============
+这个安装脚本是按照官方[安装文档](http://docs.openstack.org/icehouse/install-guide/install/apt/content/)写的。基本没有逻辑，只是命令的堆积，仅供装着玩。
 
 ##单节点安装OpenStack(Icehouse)
 
@@ -10,6 +11,7 @@ os_installer
 
 - 安装：直接用root执行All_in_one.sh。  如： `source ./All_in_one.sh 192.168.0.1/24` 或 `source  ./All_in_one.sh`
 - 安装中的交互： 安装过程中会提示输入mysql密码，请输入“admin”，然后是mysql的安全信息设定，选yes/no（大都选yes）。
+- 拆分，若只想安装部分组件，请从中截取相应部分。如只想安装传统的控制节点，将compute node部分以下去掉即可。
 
 ###配置主机信息
 配置主机名为controller,并在hosts中将controller和eth0的ip对应起来。
@@ -27,6 +29,7 @@ os_installer
 - 创建了demo用户（密码： DEMO_PASS）。并关联到了名为demo的租户上，角色为普通用户。
 - 在root家目录下新建了一个adminrc文件，里面保存了admin的认证信息。在shell下使用OpenStack命令前，先source  adminrc导入环境变量。
 0 ++ / 249 --
+
 ###安装glance服务
 - 配置glance-api.conf时，在开始部分添加了rabbit_host和rabbit_password两项，但是原配置文件里有rabbit的配置，这里只是在原有配置前面加上了新配置，安装完成后正常使用也是没有问题的。但是若按照官网安装完ceilometer后，这个原配置信息会干扰glance，导致glance出错。
 - glance api注册的是v2（v2用来部署CF会有问题）。

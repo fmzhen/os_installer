@@ -152,7 +152,7 @@ sed -i '1a rpc_backend = rabbit \
 rabbit_host = controller \
 rabbit_password = RABBIT_PASS'  /etc/nova/nova.conf
 sed -i "1a my_ip = $IP" /etc/nova/nova.conf
-sed -i "1a vncserver_listen = 0.0.0.0" /etc/nova/nova.conf
+sed -i "1a vncserver_listen = 0.0.0.0" /etc/nova/nova.conf    # sed -i "1a vncserver_listen = $IP" /etc/nova/nova.conf(only the controller node , however  no matter)
 sed -i "1a vncserver_proxyclient_address = $IP" /etc/nova/nova.conf
 rm /var/lib/nova/nova.sqlite
 mysql -uroot -padmin << EOF
