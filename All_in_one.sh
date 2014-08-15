@@ -225,7 +225,7 @@ share_dhcp_address = True \
 force_dhcp_release = True \
 flat_network_bridge = br100 \
 flat_interface = eth0 \
-public_interface = eth0 ' /etc/nova/nova.conf
+public_interface = br100 ' /etc/nova/nova.conf
 service nova-network restart
 sleep 3
 nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
