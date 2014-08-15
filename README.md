@@ -1,6 +1,6 @@
 os_installer
 ============
-这个安装脚本是按照官方[安装文档](http://docs.openstack.org/icehouse/install-guide/install/apt/content/)写的。基本没有逻辑，只是命令的堆积，仅供装着玩。
+这个安装脚本是按照官方[安装文档](http://docs.openstack.org/icehouse/install-guide/install/apt/content/)写的。
 
 ##单节点安装OpenStack(Icehouse)
 
